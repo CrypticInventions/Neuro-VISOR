@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using TMPro;
-
 namespace C2M2.NeuronalDynamics.Visualization
 {
     using Interaction;

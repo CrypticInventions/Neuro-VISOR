@@ -49,15 +49,14 @@ namespace C2M2.NeuronalDynamics.Interaction {
         };
         [Tooltip("If true, positionsNorm will stack above and below on the y axis")]
         public bool stackPos = true;
-
-        private void Awake()
+        public void generateNeuron()
         {
             // Make sure we have window preview prefab and a pointer to a simulation loader
             FindWindowPrefab();
             FindSimulationLoader();
 
             // Get possible geometries from given direcrory
-            if(Application.platform==RuntimePlatform.OSXPlayer || Application.platform==RuntimePlatform.OSXEditor)
+            if (Application.platform == RuntimePlatform.OSXPlayer || Application.platform == RuntimePlatform.OSXEditor)
             {
                 cellsPath = "NeuronalDynamics" + Path.AltDirectorySeparatorChar + "Geometries";
             }
@@ -66,7 +65,7 @@ namespace C2M2.NeuronalDynamics.Interaction {
 
             if (geoms.Length > 0)
             {
-                if(ErrorWindow != null) ErrorWindow.SetActive(false);
+                if (ErrorWindow != null) ErrorWindow.SetActive(false);
 
                 // Make a preview window for each found geometry
                 Vector3[] windowPositions = GetWindowPositions(geoms.Length);
@@ -156,15 +155,15 @@ namespace C2M2.NeuronalDynamics.Interaction {
                     }
 
                     // possiblePositions only contains indices 0-5
-                    
+
                     int ind = (i % positionsNorm.Length);
 
 
                     // Copies positions from possiblePositions, stacks if necessary, and scales positions using window length
-                    positions[i] = new Vector3(windowLength.x * positionsNorm[ind].x, 
-                        windowLength.y * (positionsNorm[ind].y + stackAmount), 
+                    positions[i] = new Vector3(windowLength.x * positionsNorm[ind].x,
+                        windowLength.y * (positionsNorm[ind].y + stackAmount),
                         windowLength.z * positionsNorm[ind].z);
-                        
+
                 }
 
                 return positions;
@@ -212,5 +211,18 @@ namespace C2M2.NeuronalDynamics.Interaction {
 
             }
         }
+        private void Awake()
+        {
+            generateNeuron();
+        }
+        private void Update()
+        {
+            if (Input.GetKey("r"))
+            {
+                Debug.Log("Generating Neuron");
+                generateNeuron();
+            }
+        }
     }
+
 }
