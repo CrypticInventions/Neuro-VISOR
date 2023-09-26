@@ -4,6 +4,7 @@
 
 import zmq
 import os
+import shutil
 context = zmq.Context()
 socket = context.socket(zmq.REP)
 socket.bind("tcp://*:5555")
@@ -12,9 +13,9 @@ while True:
     #  Wait for next request from client
     message = socket.recv()
     print("Received request: %s" % message)
-    os.system('wsl -e sh -c "cd /mnt/c/Users/DefaultUser/Documents/GitHub/Neuro-VISOR/Assets/PythonNeuronMeshes; python3 New_Generate_meshes.py -i cells/0-2a.CNG.swc')
+    os.system('wsl -e sh -c "cd /mnt/c/Users/bhugg/Documents/GitHub/Neuro-VISOR/Assets/PythonNeuronMeshes; python3 New_Generate_meshes.py -i cells/*.swc')
     try:
-        os.rename("C:/Users/DefaultUser/Documents/GitHub/Neuro-VISOR/Assets/PythonNeuronMeshes/0-2a.CNG.mesh.vrn", "C:/Users/DefaultUser/Documents/GitHub/Neuro-VISOR/Assets/StreamingAssets/NeuronalDynamics/Geometries/0-2a.CNG.mesh.vrn")
+        shutil.move("/Users/DefaultUser/bhugg/GitHub/Neuro-VISOR/Assets/PythonNeuronMeshes/*.vrn", "/Users/DefaultUser/bhugg/GitHub/Neuro-VISOR/Assets/StreamingAssets/NeuronalDynamics/Geometries")
     except:
         socket.send(b"Error requested file is within project already")
     else:
