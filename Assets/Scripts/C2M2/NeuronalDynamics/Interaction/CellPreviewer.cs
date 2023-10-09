@@ -21,7 +21,7 @@ namespace C2M2.NeuronalDynamics.Interaction {
         public bool renderWalls = true;
         public Color32 windowColor = Color.black;
         public GameObject ErrorWindow = null;
-
+        
         /// <summary>
         /// Colors ot use for the 1D cell renderings. More than cellColors.Length cells will repeat these colors
         /// </summary>
@@ -47,6 +47,7 @@ namespace C2M2.NeuronalDynamics.Interaction {
             new Vector3(0, 0, -1),
             new Vector3(0, 0, -2),
         };
+
         [Tooltip("If true, positionsNorm will stack above and below on the y axis")]
         public bool stackPos = true;
         public void generateNeuron()
@@ -190,7 +191,7 @@ namespace C2M2.NeuronalDynamics.Interaction {
                 go.transform.parent = transform;
                 go.transform.localPosition = position;
                 go.name = fileName + "Preview";
-
+             
                 // Find each wall in window, color accoring to input
                 MeshRenderer[] prefabWalls = go.GetComponentsInChildren<MeshRenderer>();
                 if (prefabWalls.Length > 0)
@@ -200,6 +201,7 @@ namespace C2M2.NeuronalDynamics.Interaction {
                         r.enabled = renderWalls;
                         r.material.color = windowColor;
                     }
+                   
                 }
 
                 // Start neuron cell previewer.
@@ -209,7 +211,11 @@ namespace C2M2.NeuronalDynamics.Interaction {
                 preview.loader = loader;
                 preview.PreviewCell(fileName, color);
 
+                go.tag = "Neuron";
+             
+
             }
+        
         }
         private void Awake()
         {
@@ -220,6 +226,20 @@ namespace C2M2.NeuronalDynamics.Interaction {
             if (Input.GetKey("r"))
             {
                 Debug.Log("Generating Neuron");
+                // Destroy(gameObject.GetComponentInChildren<MeshRenderer>());
+                // Destroy(gameObject.GetComponentInChildren<NeuronCellPreview>());
+                // Destroy(gameObject.GetComponent<NDSimulationLoader>());
+                //Destroy(gameObject.GetComponent<TextMeshProUGUI>());
+                // Destroy(gameObject.transform.GetChild(1));
+                 GameObject [] array = GameObject.FindGameObjectsWithTag("Neuron");
+                foreach(GameObject game in array)
+                {
+                    Destroy(game);
+                }
+            }
+            if(Input.GetKey("e"))
+            {
+              
                 generateNeuron();
             }
         }

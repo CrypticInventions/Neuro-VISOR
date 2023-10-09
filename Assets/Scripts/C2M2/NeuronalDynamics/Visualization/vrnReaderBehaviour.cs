@@ -19,9 +19,9 @@ public class VrnReaderBehaviour : MonoBehaviour
 {
     /// the test archive file test.vrn
     public string fileName = "testNew.vrn";
-    private IEnumerator vrnRead()
+    private void vrnRead()
     {
-        yield return new WaitForSeconds(300);
+        
         try
         {
             ////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ public class VrnReaderBehaviour : MonoBehaviour
     /// 2.5 inflated 2d mesh is retrieved from the archive test.vrn
     public void start()
     {
-        StartCoroutine(vrnRead());
+        vrnRead();
 
     }
 }
