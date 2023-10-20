@@ -11,8 +11,9 @@ public class HelloClient : MonoBehaviour
        // _helloRequester.Start(); WIP
 
     }
-     private void Update()
+     public void Oncick()
      {
+        Debug.Log("Pressed Button");
          if (Input.GetKeyUp("x"))
          {
              _helloRequester.Start();
