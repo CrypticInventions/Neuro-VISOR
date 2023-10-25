@@ -9,6 +9,7 @@ using Random = System.Random;
 namespace C2M2.NeuronalDynamics.Interaction {
     using Utils.DebugUtils;
     using NeuronalDynamics.Visualization;
+    using System.Net;
     public class CellPreviewer : MonoBehaviour
     {
         [Tooltip("Cell path relative to StreamingAssets")]
@@ -221,16 +222,14 @@ namespace C2M2.NeuronalDynamics.Interaction {
         {
             generateNeuron();
         }
-        private void Update()
+        public void refreshNeuronPreviewer()
         {
-            if (Input.GetKey("r"))
-            {
+
+           /* using var listener = new HttpListener();          WIP
+           // listener.Prefixes.Add("tcp://localhost:5555");
+            listener.Start();
+           */
                 Debug.Log("Generating Neuron");
-                // Destroy(gameObject.GetComponentInChildren<MeshRenderer>());
-                // Destroy(gameObject.GetComponentInChildren<NeuronCellPreview>());
-                // Destroy(gameObject.GetComponent<NDSimulationLoader>());
-                //Destroy(gameObject.GetComponent<TextMeshProUGUI>());
-                // Destroy(gameObject.transform.GetChild(1));
                  GameObject [] array = GameObject.FindGameObjectsWithTag("Neuron");
                 foreach(GameObject game in array)
                 {
@@ -242,4 +241,3 @@ namespace C2M2.NeuronalDynamics.Interaction {
         }
     }
 
-}
