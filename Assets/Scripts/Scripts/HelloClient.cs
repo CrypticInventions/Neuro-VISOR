@@ -14,10 +14,8 @@ public class HelloClient : MonoBehaviour
      public void Oncick()
      {
         Debug.Log("Pressed Button");
-         if (Input.GetKeyUp("x"))
-         {
-             _helloRequester.Start();
-         }
+        _helloRequester.Start();
+        
          /*else if(Input.GetKeyUp("c"))
         {
             Debug.Log("Stopping program");
