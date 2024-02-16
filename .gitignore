@@ -89,3 +89,5 @@ timesteps.txt
 
 # Visual Studio Code
 .vscode/
+*.vrn
+*.meta

@@ -13,9 +13,10 @@ while True:
     #  Wait for next request from client
     message = socket.recv()
     print("Received request: %s" % message)
-    os.system('wsl -e sh -c "cd /mnt/c/Users/bhugg/Documents/GitHub/Neuro-VISOR/Assets/PythonNeuronMeshes; python3 New_Generate_meshes.py -i cells/*.swc')
+    os.system('wsl -e sh -c "cd /mnt/c/Users/bhugg/Documents/GitHub/Neuro-VISOR/Assets/PythonNeuronMeshes; python3 New_Generate_meshes.py -i cells/09-06-01-4neurogliaform.CNG.swc')
     try:
-        shutil.move("/Users/DefaultUser/bhugg/GitHub/Neuro-VISOR/Assets/PythonNeuronMeshes/*.vrn", "/Users/DefaultUser/bhugg/GitHub/Neuro-VISOR/Assets/StreamingAssets/NeuronalDynamics/Geometries")
+        #was previously "/Users/DefaultUser/bhugg/GitHub/Neuro-VISOR/Assets/PythonNeuronMeshes/*.vrn"
+        shutil.move("/Users/DefaultUser/bhugg/GitHub/Neuro-VISOR/Assets/PythonNeuronMeshes/09-06-01-4neurogliaform.CNG.vrn", "/Users/DefaultUser/bhugg/GitHub/Neuro-VISOR/Assets/StreamingAssets/NeuronalDynamics/Geometries")
     except:
         socket.send(b"Error requested file is within project already")
     else:

@@ -22,6 +22,8 @@ namespace C2M2.NeuronalDynamics.Interaction {
         public bool renderWalls = true;
         public Color32 windowColor = Color.black;
         public GameObject ErrorWindow = null;
+        List<FileInfo> files = new List<FileInfo>();
+        FileSystemWatcher watcher = new FileSystemWatcher();
         
         /// <summary>
         /// Colors ot use for the 1D cell renderings. More than cellColors.Length cells will repeat these colors
@@ -53,8 +55,9 @@ namespace C2M2.NeuronalDynamics.Interaction {
         public bool stackPos = true;
         public void generateNeuron()
         {
-            // Make sure we have window preview prefab and a pointer to a simulation loader
-            FindWindowPrefab();
+           
+                // Make sure we have window preview prefab and a pointer to a simulation loader
+                FindWindowPrefab();
             FindSimulationLoader();
 
             // Get possible geometries from given direcrory
@@ -63,15 +66,16 @@ namespace C2M2.NeuronalDynamics.Interaction {
                 cellsPath = "NeuronalDynamics" + Path.AltDirectorySeparatorChar + "Geometries";
             }
             string fullPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + cellsPath;
-            string[] geoms = GetGeometryNames(fullPath);
-
-            if (geoms.Length > 0)
+            watcher.Path = fullPath;
+            watcher.Filter = "*.VRN";
+            List<string> geoms = GetGeometryNames(fullPath);            
+            if (geoms.Count > 0)
             {
                 if (ErrorWindow != null) ErrorWindow.SetActive(false);
 
                 // Make a preview window for each found geometry
-                Vector3[] windowPositions = GetWindowPositions(geoms.Length);
-                Color32[] previewColors = GetWindowColors(geoms.Length);
+                Vector3[] windowPositions = GetWindowPositions(geoms.Count);
+                Color32[] previewColors = GetWindowColors(geoms.Count);
                 for (int i = 0; i < windowPositions.Length; i++)
                 {
                     InstantiatePreviewWindow(geoms[i], windowPositions[i], previewColors[i]);
@@ -120,17 +124,30 @@ namespace C2M2.NeuronalDynamics.Interaction {
                     }
                 }
             }
-            string[] GetGeometryNames(string targetDir)
+            List<string> GetGeometryNames(string targetDir)
             {
                 DirectoryInfo d = new DirectoryInfo(targetDir);
+                if (files.Count == 0) { files = d.GetFiles("*.vrn").ToList(); }
+                Debug.Log("files count: " + files.Count);
+                          
+                if (files.Count == 0) return new List<string> { };
 
-                FileInfo[] files = d.GetFiles("*.vrn");
-                if (files.Length == 0) return new string[] { };
-
-                string[] fileNames = new string[files.Length];
-                for (int i = 0; i < files.Length; i++)
+                List<string> fileNames = new List<string>();
+                if(Placed.Page != 0)
                 {
-                    fileNames[i] = files[i].Name;
+                    foreach (FileInfo i in files.GetRange(Placed.Page , Placed.cellSize))
+                    {
+                        fileNames.Add(i.Name);
+                    }
+
+                }
+                else if (Placed.Page == 0)
+                {
+                    
+                    foreach (FileInfo i in files.GetRange(0, 9))
+                    {
+                        fileNames.Add(i.Name);
+                    }
                 }
                 return fileNames;
             }
@@ -216,28 +233,57 @@ namespace C2M2.NeuronalDynamics.Interaction {
              
 
             }
-        
+            geoms.RemoveRange(0, geoms.Count);
+
         }
+
+
+        private void ConfigureFileSystemWatcher(string path)
+        {
+            watcher.Path = path;
+            watcher.Filter = "*.vrn";
+            watcher.EnableRaisingEvents = true;
+            watcher.Created += OnFileCreated;
+        }
+
+        private void OnFileCreated(object sender, FileSystemEventArgs e)
+        {
+            
+            Debug.Log($"New file created: {e.FullPath}");
+            FileInfo fileInfo = new FileInfo(e.FullPath);
+           files.Add(fileInfo); 
+                                 
+        }
+
         private void Awake()
         {
+            string fullPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + cellsPath;
+            ConfigureFileSystemWatcher(fullPath);
             generateNeuron();
         }
-        public void refreshNeuronPreviewer()
-        {
+       
 
-           /* using var listener = new HttpListener();          WIP
-           // listener.Prefixes.Add("tcp://localhost:5555");
-            listener.Start();
-           */
-                Debug.Log("Generating Neuron");
-                 GameObject [] array = GameObject.FindGameObjectsWithTag("Neuron");
-                foreach(GameObject game in array)
-                {
-                    Destroy(game);
-                }
-                generateNeuron();
-            }
+        public void CreateNew()
+        {
             
+            GameObject[] array = GameObject.FindGameObjectsWithTag("Neuron");
+            foreach (GameObject game in array)
+            {
+
+                Destroy(game);
+
+
+            }
+
+            Debug.Log("Generating Neuron");
+
+            generateNeuron();
         }
+
+       
+        }
+            
+
     }
+    
 

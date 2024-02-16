@@ -18,6 +18,7 @@ namespace C2M2.NeuronalDynamics.Visualization
     /// </summary>
     public class NeuronCellPreview : MonoBehaviour
     {
+       
         public string vrnFileName = "null";
         public Color32 windowColor;
         public NDSimulationLoader loader = null;
@@ -47,6 +48,8 @@ namespace C2M2.NeuronalDynamics.Visualization
                 if (fileNameDisplay != null) fileNameDisplay.text = "null";
                 return;
             }
+            //if vrnFileName is not in dictionary then do the rest
+            //if (!(Placed.neuron.Contains(vrnFileName))) ;
 
             char sl = Path.DirectorySeparatorChar;
             if (!vrnFileName.EndsWith(".vrn")) vrnFileName = vrnFileName + ".vrn";
@@ -94,6 +97,7 @@ namespace C2M2.NeuronalDynamics.Visualization
             {
                 // Draw scale labels
                 Vector3 cellSize = grid.Mesh.bounds.size;
+            
                 if (sizeLabel != null)
                     sizeLabel.text =
                         "Size: ("
